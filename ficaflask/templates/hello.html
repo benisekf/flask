@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact List</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        table {
+            margin: auto; 
+        }
+
+        form {
+            width: 50%; 
+            margin-top: 20px; 
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Contact List</h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <table border="1">
+            <tr>
+                <th>IME</th>
+                <th>PREZIME</th>
+                <th>EMAIL</th>
+                <th>PROMENE</th>
+            </tr>
+            {% for contact in contacts %}
+            <tr>
+                <td>{{ contact.ime }}</td>
+                <td>{{ contact.prezime }}</td>
+                <td>{{ contact.email }}</td>
+                <td>
+                    <a href="{{ url_for('main.edit_contact', email=contact.email) }}">Edit</a> |
+                    <form action="{{ url_for('main.delete_contact', email=contact.email) }}" method="post" style="display:inline;">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <h2>Add Contact</h2>
+        <form action="{{ url_for('main.add_contact') }}" method="post">
+            IME: <input type="text" name="ime"><br>
+            PREZIME: <input type="text" name="prezime"><br>
+            EMAIL: <input type="text" name="email"><br>
+            <input type="submit" value="Save">
+        </form>
+    </div>
+</body>
+</html>
